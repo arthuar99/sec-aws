@@ -1,5 +1,7 @@
 # Secure AWS Infrastructure with Terraform
 
+![Terraform CI](https://github.com/arthuar99/sec-aws/actions/workflows/terraform-ci.yml/badge.svg)
+
 This project provisions a secure, high-availability AWS infrastructure for a FastAPI application using Terraform.
 
 ## Architecture
