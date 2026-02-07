@@ -1,54 +1,54 @@
 name: Terraform CI
 
 on:
-  push:
-    branches: [ "main", "stage", "test" ]
-  pull_request:
-    branches: [ "main", "stage", "test" ]
+    push:
+        branches: ["main", "stage", "test"]
+    pull_request:
+        branches: ["main", "stage", "test"]
 
 jobs:
-  terraform:
-    name: Terraform Plan
-    runs-on: ubuntu-latest
-    
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+    terraform:
+        name: Terraform Plan
+        runs-on: ubuntu-latest
 
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+        # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+        defaults:
+            run:
+                shell: bash
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.0
+        steps:
+            # Checkout the repository to the GitHub Actions runner
+            - name: Checkout
+              uses: actions/checkout@v3
 
-    # Configure AWS credentials
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+            # Install the latest version of Terraform CLI
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: 1.5.7
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+            # Configure AWS credentials
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1
 
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      run: terraform fmt -check
+            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+            - name: Terraform Init
+              run: terraform init
 
-    # Validates the configuration files
-    - name: Terraform Validate
-      run: terraform validate
+            # Checks that all Terraform configuration files adhere to a canonical format
+            - name: Terraform Format
+              run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
-      env:
-        TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+            # Validates the configuration files
+            - name: Terraform Validate
+              run: terraform validate
+
+            # Generates an execution plan for Terraform
+            - name: Terraform Plan
+              run: terraform plan -input=false
+              env:
+                  TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
