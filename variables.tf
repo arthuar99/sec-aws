@@ -1,3 +1,9 @@
+variable "enable_monitoring" {
+  description = "Enable detailed monitoring for resources"
+  type        = bool
+  default     = true
+}
+
 variable "aws_region" {
   description = "The AWS region to deploy to"
   type        = string
