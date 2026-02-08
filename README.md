@@ -6,7 +6,7 @@ This project provisions a secure, high-availability AWS infrastructure for a Fas
 
 ## Architecture
 
-![Architecture](https://github.com/user-attachments/assets/...) <!-- Add architecture diagram link if available -->
+![Architecture](https://github.com/arthuar99/sec-aws/blob/main/diagram.png?raw=true) <!-- Add architecture diagram link if available -->
 
 Key components:
 - **VPC**: Custom VPC with public and private subnets across 2 Availability Zones.
@@ -79,3 +79,36 @@ After applying, Terraform will output:
 - `cloudfront_domain_name`: CloudFront Domain
 - `rds_endpoint`: Database Endpoint
 - `redis_endpoint`: Redis Endpoint
+
+## Traffic Flow Details
+
+### Routing Layer (Route 53) 🌐
+
+The user requests your Domain Name (e.g., www.mazen-cloud.com).
+
+Route 53 directs the request based on the type:
+
+- **Website/Static content request (Frontend)** ➔ Goes to CloudFront.
+- **Data/API request (Backend)** ➔ Goes to the ALB.
+
+### Edge Layer (Security & CDN) 🛡️
+
+- **CloudFront**: Delivers static content (images, files) to the user at high speed via edge locations.
+- **S3 Bucket**: The origin storage for files. It is completely locked down (Private) and allows access only to CloudFront via OAC (Origin Access Control).
+- **WAF & Shield**: A firewall that filters malicious attacks (like SQLi, XSS) and DDoS attempts before they reach your servers.
+
+### Application Layer (Compute) ⚙️
+
+- **ALB (Public Subnet)**: Receives API requests and distributes the load.
+- **EC2 Instances (Private Subnet)**: These run your FastAPI application. They are isolated and cannot be accessed directly from the internet.
+- **Auto Scaling**: Automatically increases or decreases the number of instances based on traffic load.
+
+### Data Layer (Storage & Caching) 💾
+
+- **ElastiCache (Redis)**: Ultra-fast temporary memory (caching) to reduce the load on the main database.
+- **RDS (Database)**: The primary database located in a strictly isolated network (Private DB Subnet).
+
+### Private Channels (Management & Cost Optimization) 🔐
+
+- **VPC Endpoints**: Allow your EC2 servers to talk to S3 and Systems Manager without leaving the AWS network (Higher security & saves NAT Gateway costs).
+- **Systems Manager (SSM)**: Allows you (the engineer) to access and manage servers securely without opening Port 22 (SSH).
