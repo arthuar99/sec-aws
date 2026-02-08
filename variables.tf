@@ -7,7 +7,7 @@ variable "enable_monitoring" {
 variable "aws_region" {
   description = "The AWS region to deploy to"
   type        = string
-  default     = "us-east-1"
+  default     = "eu-west-2"
 }
 
 variable "project_name" {
