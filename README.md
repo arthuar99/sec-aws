@@ -112,3 +112,18 @@ Route 53 directs the request based on the type:
 
 - **VPC Endpoints**: Allow your EC2 servers to talk to S3 and Systems Manager without leaving the AWS network (Higher security & saves NAT Gateway costs).
 - **Systems Manager (SSM)**: Allows you (the engineer) to access and manage servers securely without opening Port 22 (SSH).
+
+## Changelog
+
+### v1.2.0 (Latest - London Region)
+- **Region Migration**: Switched infrastructure from `us-east-1` to `eu-west-2` (London).
+- **Secure Management**: Added Session Manager (SSM) support with VPC Endpoints for secure, keyless server access.
+- **DNS**: Integrated Route 53 for domain management.
+- **IAM**: Added strict IAM roles for EC2 instances.
+
+### v1.0.0 (Stable)
+- **High Availability Infrastructure**: Complete VPC with public/private subnets, Multi-AZ RDS, and Auto Scaling Group.
+- **Security**: Strict Security Groups, WAF protection for ALB, and S3 Origin Access Control.
+- **CI/CD Pipeline**: Automated GitHub Actions workflow for Terraform Plan/Validate on `main`, `stage`, and `test` branches.
+- **Monitoring**: Added `enable_monitoring` variable to control resource monitoring.
+- **Outputs**: Expoed `environment_name` to track deployments.
