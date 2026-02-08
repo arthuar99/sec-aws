@@ -88,3 +88,28 @@ resource "aws_security_group" "db_sg" {
     Name = "${var.project_name}-${var.environment}-db-sg"
   }
 }
+
+resource "aws_security_group" "endpoints_sg" {
+  name        = "${var.project_name}-${var.environment}-endpoints-sg"
+  description = "Security group for VPC Endpoints"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "Allow HTTPS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-endpoints-sg"
+  }
+}
