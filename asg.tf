@@ -19,6 +19,10 @@ resource "aws_launch_template" "app" {
     security_groups             = [aws_security_group.app_sg.id]
   }
 
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_profile.name
+  }
+
   user_data = base64encode(<<-EOF
               #!/bin/bash
               yum update -y

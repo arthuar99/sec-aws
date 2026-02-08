@@ -75,3 +75,15 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "domain_name" {
+  description = "Domain name for the application (e.g. mazen-cloud.com)"
+  type        = string
+  default     = "" # Optional
+}
+
+variable "hosted_zone_id" {
+  description = "Route 53 Hosted Zone ID"
+  type        = string
+  default     = "" # Optional
+}
