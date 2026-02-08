@@ -17,13 +17,13 @@ resource "aws_db_instance" "default" {
   db_name           = var.db_name
   username          = var.db_username
   password          = var.db_password
-  
+
   db_subnet_group_name   = aws_db_subnet_group.default.name
   vpc_security_group_ids = [aws_security_group.db_sg.id]
-  
-  multi_az               = true # High Availability
-  skip_final_snapshot    = true # For demo/dev purposes
-  publicly_accessible    = false
+
+  multi_az            = true # High Availability
+  skip_final_snapshot = true # For demo/dev purposes
+  publicly_accessible = false
 
   tags = {
     Name = "${var.project_name}-${var.environment}-rds"
